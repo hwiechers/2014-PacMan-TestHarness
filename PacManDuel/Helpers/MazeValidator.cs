@@ -10,7 +10,7 @@ namespace PacManDuel.Helpers
 {
     class MazeValidator
     {
-        private const int _EXACT_NUMBER_OF_DIFFERENCES_FOR_LEGAL_MOVE = 2;
+        private const int _MAX_NUMBER_OF_DIFFERENCES_FOR_LEGAL_MOVE = 2;
 
         public static Enums.MazeValidationOutcome ValidateMaze(Maze currentMaze, Maze previousMaze, StreamWriter logFile)
         {
@@ -35,7 +35,13 @@ namespace PacManDuel.Helpers
         private static bool IsMazeValid(Maze currentMaze, Maze previousMaze, StreamWriter logFile)
         {
             var diffs = GetNumberOfDifferences(currentMaze, previousMaze);
-            if (diffs == _EXACT_NUMBER_OF_DIFFERENCES_FOR_LEGAL_MOVE) return true;
+            if (diffs == _MAX_NUMBER_OF_DIFFERENCES_FOR_LEGAL_MOVE)
+                return true;
+
+            var a = previousMaze.FindCoordinateOf(Symbols.SYMBOL_PLAYER_A);
+            var b = previousMaze.FindCoordinateOf(Symbols.SYMBOL_PLAYER_B);
+            if (diffs == 1 && WasInRespawnPoint(a.X, a.Y) && WasInRespawnPoint(a.X, a.Y))
+                return true;
 
             logFile.WriteLine("[Validator] : Failure: Number of changes is: " + diffs);
             return false;

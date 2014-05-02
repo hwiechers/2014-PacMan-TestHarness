@@ -118,6 +118,19 @@ namespace PacManDuel.Models
                     }
                 }
             }
+
+            //Handle the edge case where both players are on the respawn point
+            var playerSymbols = new[] { Symbols.SYMBOL_PLAYER_A, Symbols.SYMBOL_PLAYER_B };
+            var settings = Properties.Settings.Default;
+            for (int index = 0; index < 2; index++)
+            {
+                if (symbol == playerSymbols[index] && 
+                    GetSymbol(settings.MazeCenterX, settings.MazeCenterY) == playerSymbols[(index + 1) % 2])
+                {
+                    return new Point(settings.MazeCenterX, settings.MazeCenterY);
+                }
+            }
+
             return new Point();
         }
 
